@@ -52,19 +52,13 @@
 #define GroupTriggerThresholdString "CN_GROUP_TRIGGER_THRESHOLD"
 #define RunSynchronizationModeString "CN_RUN_SYNCHRONIZATION_MODE"
 #define IOLevelString "CN_IO_LEVEL"
-#define TriggerPolarityString "CN_TRIGGER_POLARITY"
 #define AcquisitionModeString "CN_ACQ_MODE"
 
 // Acquisition related
-#define ChannelEnableMaskString "CN_CHANNEL_ENABLE_MASK" 
+#define ChannelEnableMaskString "CN_CHANNEL_ENABLE_MASK"
 #define DPPAcquisitionModeString "CN_DPP_ACQ_MODE"
 #define DPPAcquisitionParamString "CN_DPP_ACQ_PARAM"
 #define DPPTriggerModeString "CN_DPP_TRIGGERMODE"
-
-// DPP
-#define DPPPreTriggerString "CN_DPP_PRE_TRIGGER"
-#define DPPChannelPulsePolarityString "CN_DPP_CHANNEL_PULSE_POLARITY"
-
 
 // Transfer
 #define DPPEventAggregationThresString "CN_DPP_EVENT_AGGREGATION_THRES"
@@ -72,29 +66,43 @@
 #define DPPNumEventAggregateString "CN_DPP_NUM_EVENT_AGGREGATE"
 #define DPPNumAggregateBLTString "CN_DPP_NUM_AGGREGATE_BLT"
 
-// Channel related
-#define DPPPSDThresholdHoldString "CN_DPP_PSD_THRHO"
-#define DPPPSDThresholdString "CN_DPP_PSD_THR"
-#define DPPPSDSelfThresholdString "CN_DPP_PSD_SELFT"
-#define DPPPSDChargeSensString "CN_DPP_PSD_CSENS"
-#define DPPPSDShortGateString "CN_DPP_PSD_SGATE"
-#define DPPPSDLongGateString "CN_DPP_PSD_LGATE"
-#define DPPPSDGateOffsetString "CN_DPP_PSD_PGATE"
-#define DPPPSDTriggerValidationWindowString "CN_DPP_PSD_TVAW"
-#define DPPPSDNumberSampleString "CN_DPP_PSD_NSBL"
-#define DPPPSDDiscriminatorString "CN_DPP_PSD_DISCR"
-#define DPPPSDCFDFractionString "CN_DPP_PSD_CFDF"
-#define DPPPSDCFDDelayString "CN_DPP_PSD_CFDD"
-#define DPPPSDPileUpString "CN_DPP_PSD_PUR"
-#define DPPPSDPileUpGapString "CN_DPP_PSD_PURGAP"
+// Input group
+#define RecordLengthString "CN_RECORD_LENGTH"
+#define PreTriggerString "CN_PRE_TRIGGER"
+#define ChannelPulsePolarityString "CN_CHANNEL_PULSE_POLARITY"
+#define BaselineSamplesString "CN_NSBL"
+#define BaselineFixedValueString "CN_FIX_BASELINE"
+#define DCOffsetString "CN_DC_OFFSET"
+#define InputDynamicString "CN_INPUT_DR"
+
+// Discriminator
+#define PSDDiscriminatorString "CN_DPP_PSD_DISCR"
+#define PSDSelfThresholdString "CN_DPP_PSD_SELFT"
+#define PSDThresholdString "CN_DPP_PSD_THR"
+#define PSDThresholdHoldString "CN_DPP_PSD_THRHO"
+#define PSDCFDDelayString "CN_DPP_PSD_CFDD"
+#define PSDCFDFractionString "CN_DPP_PSD_CFDF"
+
+// QDC
+#define PSDChargeSensString "CN_DPP_PSD_CSENS"
+#define PSDShortGateString "CN_DPP_PSD_SGATE"
+#define PSDLongGateString "CN_DPP_PSD_LGATE"
+#define PSDGateOffsetString "CN_DPP_PSD_PGATE"
+
+// Veto/Coincidence
+#define PSDTriggerValidationWindowString "CN_DPP_PSD_TVAW"
+#define PSDPileUpString "CN_DPP_PSD_PUR"
+#define PSDPileUpGapString "CN_DPP_PSD_PURGAP"
 
 // Result
-#define DPPPSDRateEvString "CN_DPP_PSD_RATE_EV"
-#define DPPPSDChargeLongString "CN_DPP_PSD_CHARGE_LONG"
-#define DPPPSDChargeShortString "CN_DPP_PSD_CHARGE_SHORT"
-#define DPPPSDValString "CN_DPP_PSD_PSD"
-#define DPPPSDTimeString "CN_DPP_PSD_TIME_NS"
+#define PSDRateEvString "CN_DPP_PSD_RATE_EV"
+#define PSDRateEv2String "CN_DPP_PSD_RATE_EV2"
+#define PSDChargeLongString "CN_DPP_PSD_CHARGE_LONG"
+#define PSDChargeShortString "CN_DPP_PSD_CHARGE_SHORT"
+#define PSDValString "CN_DPP_PSD_PSD"
+#define PSDTimeString "CN_DPP_PSD_TIME_NS"
 
+#define CN_EnergyHistString "CN_ENERGY_HIST"
 
 #define MAX_ENUM_STRING_SIZE 26
 typedef struct {
@@ -104,6 +112,8 @@ typedef struct {
 
 #define MAX_SIGNALS 8
 
+#define TEMP_LENGTH_RECORD 4 * 64
+
 #define MAXNBITS 16
 
 #define NUM_TRIGGER_MODES 4
@@ -111,14 +121,12 @@ typedef struct {
 static const char *triggerModeStrings[NUM_TRIGGER_MODES] = {
     "Disable", "Ext. out only", "Acq only", "Acq and Ext. out"};
 
-/** ADC simulation driver; does 1-D waveforms on 8 channels.
- * Inherits from asynNDArrayDriver */
-
 class ADCAEN1725S : public asynNDArrayDriver {
 public:
   ADCAEN1725S(const char *portName, int LinkType, int LinkNum, int ConetNode,
-              int VMEBaseAddress, int traceMask, NDDataType_t dataType, int maxBuffers,
-              int memoryChannel, size_t maxMemory, int priority, int stackSize);
+              int VMEBaseAddress, int traceMask, NDDataType_t dataType,
+              int maxBuffers, int memoryChannel, size_t maxMemory, int priority,
+              int stackSize);
 
   /* These are the methods that we override from asynNDArrayDriver */
   virtual asynStatus writeInt32(asynUser *pasynUser, epicsInt32 value);
@@ -145,21 +153,21 @@ protected:
   int CN_PCB_Revision;
   int CN_ADC_NBits;
 
+  // Interrupt
   int CN_IRQEnable;
   int CN_IRQLevel;
   int CN_IRQStatusID;
   int CN_IRQEventNumber;
   int CN_IRQMode;
-
   int CN_ClearData;
   int CN_DisableEventAlignedReadout;
 
+  // Status
   int CN_ReadTemperature;
 
+  // Acq
   int CN_AcquisitionMode;
-
   int CN_ChannelEnableMask;
-
   int CN_SendSWTrigger;
   int CN_SWTriggerMode;
   int CN_ExtTriggerMode;
@@ -170,10 +178,8 @@ protected:
   int CN_GroupTriggerThreshold;
   int CN_RunSynchronizationMode;
   int CN_IOLevel;
-  int CN_TriggerPolarity;
 
-  int CN_DPPPreTrigger;
-  int CN_DPPChannelPulsePolarity;
+  // Event
   int CN_DPPEventAggregationThres;
   int CN_DPPEventAggregationMax;
   int CN_DPPNumEventAggregate;
@@ -182,24 +188,39 @@ protected:
   int CN_DPPAcquisitionParam;
   int CN_DPPTriggerMode;
 
-  int CN_DPPPSDThresholdHold;
-  int CN_DPPPSDThreshold;
-  int CN_DPPPSDSelfThreshold;
-  int CN_DPPPSDChargeSens;
-  int CN_DPPPSDShortGate;
-  int CN_DPPPSDLongGate;
-  int CN_DPPPSDGateOffset;
-  int CN_DPPPSDTriggerValidationWindow;
-  int CN_DPPPSDNumberSample;
-  int CN_DPPPSDDiscriminator;
-  int CN_DPPPSDCFDFraction;
-  int CN_DPPPSDCFDDelay;
-  int CN_DPPPSDPileUp;
-  int CN_DPPPSDPileUpGap;
+  // Input
+  int CN_RecordLength;
+  int CN_PreTrigger;
+  int CN_ChannelPulsePolarity;
+  int CN_BaselineSamples;
+  int CN_BaselineFixedValue;
+  int CN_DCOffset;
+  int CN_InputDynamic;
 
-  int CN_DPPPSDChargeLong;
-  int CN_DPPPSDChargeShort;
-  int CN_DPPPSDRateEv;
+  // Discriminator
+  int CN_PSDDiscriminator;
+  int CN_PSDSelfThreshold;
+  int CN_PSDThreshold;
+  int CN_PSDThresholdHold;
+  int CN_PSDCFDDelay;
+  int CN_PSDCFDFraction;
+
+  // QDC
+  int CN_PSDChargeSens;
+  int CN_PSDShortGate;
+  int CN_PSDLongGate;
+  int CN_PSDGateOffset;
+
+  // Others
+  int CN_PSDTriggerValidationWindow;
+  int CN_PSDPileUp;
+  int CN_PSDPileUpGap;
+
+  // Result
+  int CN_PSDChargeLong;
+  int CN_PSDChargeShort;
+  int CN_PSDRateEv;
+  int CN_PSDRateEv2;
 
 private:
   /* These are the methods that are new to this class */
@@ -240,12 +261,11 @@ private:
   int numValidSWTriggerModes_;
   int numValidExtTriggerModes_;
 
-  char *buffer = NULL;                             // readout buffer
+  char *buffer = NULL;                            // readout buffer
   CAEN_DGTZ_DPP_PSD_Event_t *events[MAX_SIGNALS]; // events buffer
-  CAEN_DGTZ_DPP_PSD_Waveforms_t *waveform = NULL;  // waveforms buffer
+  CAEN_DGTZ_DPP_PSD_Waveforms_t *waveform = NULL; // waveforms buffer
   uint32_t allocatedSize, bufferSize;
   uint32_t numEvents[MAX_SIGNALS];
-
 
   enumStruct_t swtriggerModeEnums_[NUM_TRIGGER_MODES];
   enumStruct_t exttriggerModeEnums_[NUM_TRIGGER_MODES];

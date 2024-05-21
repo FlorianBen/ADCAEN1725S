@@ -1,8 +1,8 @@
 #=================================================================#
 # Template file: ADCAEN1725S.template
-# Database for the records specific to the ADC simulated detector driver
-# Mark Rivers
-# February 28, 2016
+# Database for the records for channel DPP PSD
+# Florian Benedetti
+# April 11, 2024
 
 record(stringout, "$(P)$(R)Name")
 {
@@ -16,99 +16,153 @@ record(longin, "$(P)$(R)Temperature_RBV")
    field(SCAN, "I/O Intr")
 }
 
-record(ao, "$(P)$(R)DPPRecordLength")
+# Input configuration
+record(ao, "$(P)$(R)RecordLength")
 {
    field(PINI, "YES")
    field(DTYP, "asynInt32")
-   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))CN_DPP_RECORD_LENGTH")
+   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))CN_RECORD_LENGTH")
 }
 
-record(ai, "$(P)$(R)DPPRecordLength_RBV")
+record(ai, "$(P)$(R)RecordLength_RBV")
 {
    field(DTYP, "asynInt32")
-   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))CN_DPP_RECORD_LENGTH")
+   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))CN_RECORD_LENGTH")
    field(SCAN, "I/O Intr")
 }
 
-record(ao, "$(P)$(R)DPPPreTrigger")
+record(ao, "$(P)$(R)PreTrigger")
 {
    field(PINI, "YES")
    field(DTYP, "asynInt32")
-   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))CN_DPP_PRE_TRIGGER")
+   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))CN_PRE_TRIGGER")
 }
 
-record(ai, "$(P)$(R)DPPPreTrigger_RBV")
+record(ai, "$(P)$(R)PreTrigger_RBV")
 {
    field(DTYP, "asynInt32")
-   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))CN_DPP_PRE_TRIGGER")
+   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))CN_PRE_TRIGGER")
    field(SCAN, "I/O Intr")
 }
 
-record(mbbo, "$(P)$(R)DPPPulsePolarity") {
+record(mbbo, "$(P)$(R)PulsePolarity") {
   field(PINI, "YES")
   field(DTYP, "asynInt32")
-  field(OUT,  "@asyn($(PORT),$(ADDR))CN_DPP_CHANNEL_PULSE_POLARITY")
-  field(DESC, "DPP Pulse polarity")
+  field(OUT,  "@asyn($(PORT),$(ADDR))CN_CHANNEL_PULSE_POLARITY")
+  field(DESC, "Pulse polarity")
   field(ZRVL,"0")
   field(ZRST,"Positive")
   field(ONVL,"1")
   field(ONST,"Negative")
 }
 
-record(mbbi, "$(P)$(R)DPPPulsePolarity_RBV") {
+record(mbbi, "$(P)$(R)PulsePolarity_RBV") {
   field(SCAN, "I/O Intr")
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR))CN_DPP_CHANNEL_PULSE_POLARITY")
-  field(DESC, "DPP Pulse polarity")
+  field(INP,  "@asyn($(PORT),$(ADDR))CN_CHANNEL_PULSE_POLARITY")
+  field(DESC, " Pulse polarity")
   field(ZRVL, "0")
   field(ZRST, "Positive")
   field(ONVL, "1")
   field(ONST, "Negative")
 }
 
-record(ao, "$(P)$(R)DPPDCOffset")
+record(mbbo, "$(P)$(R)NumberSample") {
+  field(PINI, "YES")
+  field(DTYP, "asynInt32")
+  field(OUT,  "@asyn($(PORT),$(ADDR))CN_NSBL")
+  field(DESC, "Number of samples")
+  field(ZRVL,"0")
+  field(ZRST,"0")
+  field(ONVL,"1")
+  field(ONST,"16")
+  field(TWVL,"2")
+  field(TWST,"64")
+  field(THVL,"3")
+  field(THST,"256")
+  field(FRST,"4")
+  field(FRST,"1024")
+}
+
+record(mbbi, "$(P)$(R)NumberSample_RBV") {
+  field(SCAN, "I/O Intr")
+  field(DTYP, "asynInt32")
+  field(INP,  "@asyn($(PORT),$(ADDR))CN_NSBL")
+  field(DESC, "Number of samples")
+  field(ZRVL,"0")
+  field(ZRST,"0")
+  field(ONVL,"1")
+  field(ONST,"16")
+  field(TWVL,"2")
+  field(TWST,"64")
+  field(THVL,"3")
+  field(THST,"256")
+  field(FRST,"4")
+  field(FRST,"1024")
+}
+
+record(ao, "$(P)$(R)Fixbaseline")
 {
    field(PINI, "YES")
    field(DTYP, "asynInt32")
-   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))CN_DPP_DC_OFFSET")
+   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))CN_FIX_BASELINE")
 }
 
-record(ai, "$(P)$(R)DPPDCOffset_RBV")
+record(ai, "$(P)$(R)Fixbaseline_RBV")
 {
    field(DTYP, "asynInt32")
-   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))CN_DPP_DC_OFFSET")
+   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))CN_FIX_BASELINE")
    field(SCAN, "I/O Intr")
 }
 
-record(bo, "$(P)$(R)DPPPSDInputDynamic")
+record(ao, "$(P)$(R)DCOffset")
 {
    field(PINI, "YES")
    field(DTYP, "asynInt32")
-   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))CN_DPP_PSD_INPUTD")
+   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))CN_DC_OFFSET")
+}
+
+record(ai, "$(P)$(R)DCOffset_RBV")
+{
+   field(DTYP, "asynInt32")
+   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))CN_DC_OFFSET")
+   field(SCAN, "I/O Intr")
+}
+
+record(bo, "$(P)$(R)InputDynamic")
+{
+   field(PINI, "YES")
+   field(DTYP, "asynInt32")
+   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))CN_INPUT_DR")
    field(ZNAM, "2 Vpp")
    field(ONAM, "0.5 Vpp")
 }
 
-record(bi, "$(P)$(R)DPPPSDInputDynamic_RBV")
+record(bi, "$(P)$(R)InputDynamic_RBV")
 {
    field(DTYP, "asynInt32")
-   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))CN_DPP_PSD_INPUTD")
+   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))CN_INPUT_DR")
    field(ZNAM, "2 Vpp")
    field(ONAM, "0.5 Vpp")
    field(SCAN, "I/O Intr")
 }
 
-record(ao, "$(P)$(R)DPPNumEventAggregate")
+# Discriminator configuration
+record(bo, "$(P)$(R)DPPPSDDiscriminator")
 {
    field(PINI, "YES")
    field(DTYP, "asynInt32")
-   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))CN_DPP_NUM_EVENT_AGGREGATE")
+   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))CN_DPP_PSD_DISCR")
+   field(ZNAM, "LED")
+   field(ONAM, "DCFD")
 }
 
-record(ai, "$(P)$(R)DPPNumEventAggregate_RBV")
+record(bi, "$(P)$(R)DPPPSDDiscriminator_RBV")
 {
    field(DTYP, "asynInt32")
-   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))CN_DPP_NUM_EVENT_AGGREGATE")
+   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))CN_DPP_PSD_DISCR")
+   field(ZNAM, "LED")
+   field(ONAM, "DCFD")
    field(SCAN, "I/O Intr")
 }
 
@@ -124,6 +178,50 @@ record(ai, "$(P)$(R)DPPPSDThreshold_RBV")
    field(DTYP, "asynInt32")
    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))CN_DPP_PSD_THR")
    field(SCAN, "I/O Intr")
+}
+
+record(ao, "$(P)$(R)DPPPSDCFDDelay")
+{
+   field(PINI, "YES")
+   field(DTYP, "asynInt32")
+   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))CN_DPP_PSD_CFDD")
+}
+
+record(ai, "$(P)$(R)DPPPSDCFDDelay_RBV")
+{
+   field(DTYP, "asynInt32")
+   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))CN_DPP_PSD_CFDD")
+   field(SCAN, "I/O Intr")
+}
+
+record(mbbo, "$(P)$(R)DPPPSDCFDFraction") {
+  field(PINI, "YES")
+  field(DTYP, "asynInt32")
+  field(OUT,  "@asyn($(PORT),$(ADDR))CN_DPP_PSD_CFDF")
+  field(DESC, "Number of samples")
+  field(ZRVL,"0")
+  field(ZRST,"25 %")
+  field(ONVL,"1")
+  field(ONST,"50 %")
+  field(TWVL,"2")
+  field(TWST,"75 %")
+  field(THVL,"3")
+  field(THST,"100 %")
+}
+
+record(mbbi, "$(P)$(R)DPPPSDCFDFraction_RBV") {
+  field(SCAN, "I/O Intr")
+  field(DTYP, "asynInt32")
+  field(INP,  "@asyn($(PORT),$(ADDR))CN_DPP_PSD_CFDF")
+  field(DESC, "Number of samples")
+  field(ZRVL,"0")
+  field(ZRST,"25 %")
+  field(ONVL,"1")
+  field(ONST,"50 %")
+  field(TWVL,"2")
+  field(TWST,"75 %")
+  field(THVL,"3")
+  field(THST,"100 %")
 }
 
 record(bo, "$(P)$(R)DPPPSDSelfThreshold")
@@ -144,6 +242,22 @@ record(bi, "$(P)$(R)DPPPSDSelfThreshold_RBV")
    field(SCAN, "I/O Intr")
 }
 
+# Event transfer
+record(ao, "$(P)$(R)DPPNumEventAggregate")
+{
+   field(PINI, "YES")
+   field(DTYP, "asynInt32")
+   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))CN_DPP_NUM_EVENT_AGGREGATE")
+}
+
+record(ai, "$(P)$(R)DPPNumEventAggregate_RBV")
+{
+   field(DTYP, "asynInt32")
+   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))CN_DPP_NUM_EVENT_AGGREGATE")
+   field(SCAN, "I/O Intr")
+}
+
+# QDC
 record(mbbo, "$(P)$(R)DPPPSDChargeSens") {
   field(PINI, "YES")
   field(DTYP, "asynInt32")
@@ -182,20 +296,6 @@ record(mbbi, "$(P)$(R)DPPPSDChargeSens_RBV") {
   field(FVST,"640 fC/LSB")
 }
 
-record(ao, "$(P)$(R)DPPPSDShortGate")
-{
-   field(PINI, "YES")
-   field(DTYP, "asynInt32")
-   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))CN_DPP_PSD_SGATE")
-}
-
-record(ai, "$(P)$(R)DPPPSDShortGate_RBV")
-{
-   field(DTYP, "asynInt32")
-   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))CN_DPP_PSD_SGATE")
-   field(SCAN, "I/O Intr")
-}
-
 record(ao, "$(P)$(R)DPPPSDLongGate")
 {
    field(PINI, "YES")
@@ -210,6 +310,19 @@ record(ai, "$(P)$(R)DPPPSDLongGate_RBV")
    field(SCAN, "I/O Intr")
 }
 
+record(ao, "$(P)$(R)DPPPSDShortGate")
+{
+   field(PINI, "YES")
+   field(DTYP, "asynInt32")
+   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))CN_DPP_PSD_SGATE")
+}
+
+record(ai, "$(P)$(R)DPPPSDShortGate_RBV")
+{
+   field(DTYP, "asynInt32")
+   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))CN_DPP_PSD_SGATE")
+   field(SCAN, "I/O Intr")
+}
 
 record(ao, "$(P)$(R)DPPPSDGateOffset")
 {
@@ -225,6 +338,8 @@ record(ai, "$(P)$(R)DPPPSDGateOffset_RBV")
    field(SCAN, "I/O Intr")
 }
 
+# Misc
+
 record(ao, "$(P)$(R)DPPPSDTriggerValidationWindow")
 {
    field(PINI, "YES")
@@ -239,101 +354,7 @@ record(ai, "$(P)$(R)DPPPSDTriggerValidationWindow_RBV")
    field(SCAN, "I/O Intr")
 }
 
-record(mbbo, "$(P)$(R)DPPPSDNumberSample") {
-  field(PINI, "YES")
-  field(DTYP, "asynInt32")
-  field(OUT,  "@asyn($(PORT),$(ADDR))CN_DPP_PSD_NSBL")
-  field(DESC, "Number of samples")
-  field(ZRVL,"0")
-  field(ZRST,"0")
-  field(ONVL,"1")
-  field(ONST,"16")
-  field(TWVL,"2")
-  field(TWST,"64")
-  field(THVL,"3")
-  field(THST,"256")
-  field(FRST,"4")
-  field(FRST,"1024")
-}
-
-record(mbbi, "$(P)$(R)DPPPSDNumberSample_RBV") {
-  field(SCAN, "I/O Intr")
-  field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR))CN_DPP_PSD_NSBL")
-  field(DESC, "Number of samples")
-  field(ZRVL,"0")
-  field(ZRST,"0")
-  field(ONVL,"1")
-  field(ONST,"16")
-  field(TWVL,"2")
-  field(TWST,"64")
-  field(THVL,"3")
-  field(THST,"256")
-  field(FRST,"4")
-  field(FRST,"1024")
-}
-
-record(bo, "$(P)$(R)DPPPSDDiscriminator")
-{
-   field(PINI, "YES")
-   field(DTYP, "asynInt32")
-   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))CN_DPP_PSD_DISCR")
-   field(ZNAM, "LED")
-   field(ONAM, "DCFD")
-}
-
-record(bi, "$(P)$(R)DPPPSDDiscriminator_RBV")
-{
-   field(DTYP, "asynInt32")
-   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))CN_DPP_PSD_DISCR")
-   field(ZNAM, "LED")
-   field(ONAM, "DCFD")
-   field(SCAN, "I/O Intr")
-}
-
-record(mbbo, "$(P)$(R)DPPPSDCFDFraction") {
-  field(PINI, "YES")
-  field(DTYP, "asynInt32")
-  field(OUT,  "@asyn($(PORT),$(ADDR))CN_DPP_PSD_CFDF")
-  field(DESC, "Number of samples")
-  field(ZRVL,"0")
-  field(ZRST,"25 %")
-  field(ONVL,"1")
-  field(ONST,"50 %")
-  field(TWVL,"2")
-  field(TWST,"75 %")
-  field(THVL,"3")
-  field(THST,"100 %")
-}
-
-record(mbbi, "$(P)$(R)DPPPSDCFDFraction_RBV") {
-  field(SCAN, "I/O Intr")
-  field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR))CN_DPP_PSD_CFDF")
-  field(DESC, "Number of samples")
-  field(ZRVL,"0")
-  field(ZRST,"25 %")
-  field(ONVL,"1")
-  field(ONST,"50 %")
-  field(TWVL,"2")
-  field(TWST,"75 %")
-  field(THVL,"3")
-  field(THST,"100 %")
-}
-
-record(ao, "$(P)$(R)DPPPSDCFDDelay")
-{
-   field(PINI, "YES")
-   field(DTYP, "asynInt32")
-   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))CN_DPP_PSD_CFDD")
-}
-
-record(ai, "$(P)$(R)DPPPSDCFDDelay_RBV")
-{
-   field(DTYP, "asynInt32")
-   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))CN_DPP_PSD_CFDD")
-   field(SCAN, "I/O Intr")
-}
+# Results
 
 record(ai, "$(P)$(R)DPPPSDRateEv")
 {
@@ -342,6 +363,12 @@ record(ai, "$(P)$(R)DPPPSDRateEv")
    field(SCAN, "I/O Intr")
 }
 
+record(ai, "$(P)$(R)DPPPSDRateEv2")
+{
+   field(DTYP, "asynFloat64")
+   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))CN_DPP_PSD_RATE_EV2")
+   field(SCAN, "I/O Intr")
+}
 
 record(ai, "$(P)$(R)DPPPSDChargeLong")
 {
@@ -355,34 +382,6 @@ record(ai, "$(P)$(R)DPPPSDChargeShort")
    field(DTYP, "asynInt32")
    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))CN_DPP_PSD_CHARGE_SHORT")
    field(SCAN, "I/O Intr")
-   field(FLNK, "$(P)$(R)DPPPSDChargeShortHist")
-}
-
-record(fanout, "$(P)$(R)DPPPSDFanout") {
-    field(DESC, "Fanout for the PDS processing")
-    field(SELM, "All")
-    field(SELN, "1")
-    field(SELL, "$(P)$(R)DPPPSDChargeLong")
-    field(LNK1, "$(P)$(R)DPPPSDChargeLongHist")
-    field(LNK2, "$(P)$(R)DPPPSDcalc")
-}
-
-record(histogram,"$(P)$(R)DPPPSDChargeLongHist"){
-    field(DESC, "Histogram")
-    field(SVL, "$(P)$(R)DPPPSDChargeLong.VAL")
-    field(ULIM, "4095")
-    field(LLIM, "0")
-    field(NELM, "4096")
-    field(DTYP, "Soft Channel")
-}
-
-record(histogram,"$(P)$(R)DPPPSDChargeShortHist"){
-    field(DESC, "Histogram")
-    field(SVL, "$(P)$(R)DPPPSDChargeShort.VAL")
-    field(ULIM, "4095")
-    field(LLIM, "0")
-    field(NELM, "4096")
-    field(DTYP, "Soft Channel")
 }
 
 record(calc, "$(P)$(R)DPPPSDcalc") {
@@ -390,14 +389,18 @@ record(calc, "$(P)$(R)DPPPSDcalc") {
     field(CALC, "(a-b)/a")
     field(INPA, "$(P)$(R)DPPPSDChargeLong")
     field(INPB, "$(P)$(R)DPPPSDChargeShort")
-    field(FLNK, "$(P)$(R)DPPPSDHist")
 }
 
-record(histogram,"$(P)$(R)DPPPSDHist"){
-    field(DESC, "Histogram")
-    field(SVL, "$(P)$(R)DPPPSDcalc.VAL")
-    field(ULIM, "1")
-    field(LLIM, "0")
-    field(NELM, "4096")
-    field(DTYP, "Soft Channel")
-}
+###################################################################
+#  Test                                    #
+###################################################################
+# record(waveform, "$(P)$(R)EnergyHistogram_RBV")
+# {
+#     field(DTYP, "asynInt16ArrayIn")
+#     field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))CN_ENERGY_HIST")
+#     field(FTVL, "USHORT")
+#     field(NELM, "16384")
+#     field(LOPR, "0")
+#     field(HOPR, "16383")
+#     field(SCAN, "I/O Intr")
+# }

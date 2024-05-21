@@ -46,17 +46,19 @@ static void statusTaskC(void *drvPvt) {
  * ADDriver::ADDriver. After calling the base class constructor this method
  * creates a thread to compute the simulated detector data, and sets reasonable
  * default values for parameters defined in this class, asynNDArrayDriver and
- * ADDriver. \param[in] portName The name of the asyn port driver to be created.
+ * ADDriver.
+ * \param[in] portName The name of the asyn port driver to be created.
  * \param[in] numTimePoints The initial number of time points.
  * \param[in] dataType The initial data type (NDDataType_t) of the arrays that
- * this driver will create. \param[in] maxBuffers The maximum number of NDArray
- * buffers that the NDArrayPool for this driver is allowed to allocate. Set this
- * to -1 to allow an unlimited number of buffers. \param[in] maxMemory The
- * maximum amount of memory that the NDArrayPool for this driver is allowed to
- * allocate. Set this to -1 to allow an unlimited amount of memory. \param[in]
- * priority The thread priority for the asyn port driver thread if ASYN_CANBLOCK
- * is set in asynFlags. \param[in] stackSize The stack size for the asyn port
- * driver thread if ASYN_CANBLOCK is set in asynFlags.
+ * this driver will create.
+ * \param[in] maxBuffers The maximum number of NDArray buffers that the
+ * NDArrayPool for this driver is allowed to allocate. Set this to -1 to allow
+ * an unlimited number of buffers. \param[in] maxMemory Then maximum amount of
+ * memory that the NDArrayPool for this driver is allowed to allocate. Set this
+ * to -1 to allow an unlimited amount of memory. \param[in] priority The thread
+ * priority for the asyn port driver thread if ASYN_CANBLOCK is set in
+ * asynFlags. \param[in] stackSize The stack size for the asyn port driver
+ * thread if ASYN_CANBLOCK is set in asynFlags.
  */
 ADCAEN1725S::ADCAEN1725S(const char *portName, int LinkType, int LinkNum,
                          int ConetNode, int VMEBaseAddress, int traceMask,
@@ -93,6 +95,7 @@ ADCAEN1725S::ADCAEN1725S(const char *portName, int LinkType, int LinkNum,
 
   createParam(CaenAcquireString, asynParamInt32, &CN_Acquire);
 
+  // Board information
   createParam(CaenModelNameString, asynParamOctet, &CN_ModelName);
   createParam(CaenModelString, asynParamInt32, &CN_Model);
   createParam(CaenChannelsString, asynParamInt32, &CN_Channels);
@@ -102,6 +105,7 @@ ADCAEN1725S::ADCAEN1725S(const char *portName, int LinkType, int LinkNum,
   createParam(CaenPCBRevisionString, asynParamInt32, &CN_PCB_Revision);
   createParam(CaenADCNBitsString, asynParamInt32, &CN_ADC_NBits);
 
+  // IRQ
   createParam(IRQEnableString, asynParamInt32, &CN_IRQEnable);
   createParam(IRQLevelString, asynParamInt32, &CN_IRQLevel);
   createParam(IRQStatusIDString, asynParamInt32, &CN_IRQStatusID);
@@ -112,10 +116,10 @@ ADCAEN1725S::ADCAEN1725S(const char *portName, int LinkType, int LinkNum,
   createParam(DisableEventAlignedReadoutString, asynParamInt32,
               &CN_DisableEventAlignedReadout);
 
+  // Status
   createParam(ReadTemperatureString, asynParamInt32, &CN_ReadTemperature);
 
   createParam(AcquisitionModeString, asynParamInt32, &CN_AcquisitionMode);
-
   createParam(SendSWTriggerString, asynParamInt32, &CN_SendSWTrigger);
   createParam(SWTriggerModeString, asynParamInt32, &CN_SWTriggerMode);
   createParam(ExtTriggerModeString, asynParamInt32, &CN_ExtTriggerMode);
@@ -124,53 +128,62 @@ ADCAEN1725S::ADCAEN1725S(const char *portName, int LinkType, int LinkNum,
   createParam(RunSynchronizationModeString, asynParamInt32,
               &CN_RunSynchronizationMode);
   createParam(IOLevelString, asynParamInt32, &CN_IOLevel);
-
-  createParam(ChannelGroupMaskString, asynParamInt32, &CN_ChannelGroupMask);
-  createParam(ChannelTriggerThresholdString, asynParamInt32,
-              &CN_ChannelTriggerThreshold);
-  createParam(GroupTriggerThresholdString, asynParamInt32,
-              &CN_GroupTriggerThreshold);
-  createParam(TriggerPolarityString, asynParamInt32, &CN_TriggerPolarity);
-
-  createParam(ChannelEnableMaskString, asynParamInt32, &CN_ChannelEnableMask);
-
-  createParam(DPPPreTriggerString, asynParamInt32, &CN_DPPPreTrigger);
-  createParam(DPPChannelPulsePolarityString, asynParamInt32,
-              &CN_DPPChannelPulsePolarity);
   createParam(DPPEventAggregationThresString, asynParamInt32,
               &CN_DPPEventAggregationThres);
   createParam(DPPEventAggregationMaxString, asynParamInt32,
               &CN_DPPEventAggregationMax);
   createParam(DPPNumEventAggregateString, asynParamInt32,
               &CN_DPPNumEventAggregate);
+
   createParam(DPPNumAggregateBLTString, asynParamInt32, &CN_DPPNumAggregateBLT);
   createParam(DPPAcquisitionModeString, asynParamInt32, &CN_DPPAcquisitionMode);
   createParam(DPPAcquisitionParamString, asynParamInt32,
               &CN_DPPAcquisitionParam);
+
+  createParam(ChannelGroupMaskString, asynParamInt32, &CN_ChannelGroupMask);
+  createParam(ChannelTriggerThresholdString, asynParamInt32,
+              &CN_ChannelTriggerThreshold);
+  createParam(GroupTriggerThresholdString, asynParamInt32,
+              &CN_GroupTriggerThreshold);
   createParam(DPPTriggerModeString, asynParamInt32, &CN_DPPTriggerMode);
 
-  createParam(DPPPSDThresholdHoldString, asynParamInt32,
-              &CN_DPPPSDThresholdHold);
-  createParam(DPPPSDThresholdString, asynParamInt32, &CN_DPPPSDThreshold);
-  createParam(DPPPSDSelfThresholdString, asynParamInt32,
-              &CN_DPPPSDSelfThreshold);
-  createParam(DPPPSDChargeSensString, asynParamInt32, &CN_DPPPSDChargeSens);
-  createParam(DPPPSDShortGateString, asynParamInt32, &CN_DPPPSDShortGate);
-  createParam(DPPPSDLongGateString, asynParamInt32, &CN_DPPPSDLongGate);
-  createParam(DPPPSDGateOffsetString, asynParamInt32, &CN_DPPPSDGateOffset);
-  createParam(DPPPSDTriggerValidationWindowString, asynParamInt32,
-              &CN_DPPPSDTriggerValidationWindow);
-  createParam(DPPPSDNumberSampleString, asynParamInt32, &CN_DPPPSDNumberSample);
-  createParam(DPPPSDDiscriminatorString, asynParamInt32,
-              &CN_DPPPSDDiscriminator);
-  createParam(DPPPSDCFDFractionString, asynParamInt32, &CN_DPPPSDCFDFraction);
-  createParam(DPPPSDCFDDelayString, asynParamInt32, &CN_DPPPSDCFDDelay);
-  createParam(DPPPSDPileUpString, asynParamInt32, &CN_DPPPSDPileUp);
-  createParam(DPPPSDPileUpGapString, asynParamInt32, &CN_DPPPSDPileUpGap);
+  createParam(ChannelEnableMaskString, asynParamInt32, &CN_ChannelEnableMask);
 
-  createParam(DPPPSDChargeLongString, asynParamInt32, &CN_DPPPSDChargeLong);
-  createParam(DPPPSDChargeShortString, asynParamInt32, &CN_DPPPSDChargeShort);
-  createParam(DPPPSDRateEvString, asynParamFloat64, &CN_DPPPSDRateEv);
+  // Input
+  createParam(RecordLengthString, asynParamInt32, &CN_RecordLength);
+  createParam(PreTriggerString, asynParamInt32, &CN_PreTrigger);
+  createParam(ChannelPulsePolarityString, asynParamInt32,
+              &CN_ChannelPulsePolarity);
+  createParam(BaselineSamplesString, asynParamInt32, &CN_BaselineSamples);
+  createParam(BaselineFixedValueString, asynParamInt32, &CN_BaselineFixedValue);
+  createParam(DCOffsetString, asynParamInt32, &CN_DCOffset);
+  createParam(InputDynamicString, asynParamInt32, &CN_InputDynamic);
+
+  // Discriminator
+  createParam(PSDDiscriminatorString, asynParamInt32, &CN_PSDDiscriminator);
+  createParam(PSDSelfThresholdString, asynParamInt32, &CN_PSDSelfThreshold);
+  createParam(PSDThresholdString, asynParamInt32, &CN_PSDThreshold);
+  createParam(PSDThresholdHoldString, asynParamInt32, &CN_PSDThresholdHold);
+  createParam(PSDCFDDelayString, asynParamInt32, &CN_PSDCFDDelay);
+  createParam(PSDCFDFractionString, asynParamInt32, &CN_PSDCFDFraction);
+
+  // QDC
+  createParam(PSDChargeSensString, asynParamInt32, &CN_PSDChargeSens);
+  createParam(PSDShortGateString, asynParamInt32, &CN_PSDShortGate);
+  createParam(PSDLongGateString, asynParamInt32, &CN_PSDLongGate);
+  createParam(PSDGateOffsetString, asynParamInt32, &CN_PSDGateOffset);
+
+  // Veto/Coincidence
+  createParam(PSDTriggerValidationWindowString, asynParamInt32,
+              &CN_PSDTriggerValidationWindow);
+  createParam(PSDPileUpString, asynParamInt32, &CN_PSDPileUp);
+  createParam(PSDPileUpGapString, asynParamInt32, &CN_PSDPileUpGap);
+
+  // Results
+  createParam(PSDChargeLongString, asynParamInt32, &CN_PSDChargeLong);
+  createParam(PSDChargeShortString, asynParamInt32, &CN_PSDChargeShort);
+  createParam(PSDRateEvString, asynParamFloat64, &CN_PSDRateEv);
+  createParam(PSDRateEv2String, asynParamFloat64, &CN_PSDRateEv2);
 
   epicsSnprintf(versionString, sizeof(versionString), "%d.%d.%d",
                 DRIVER_VERSION, DRIVER_REVISION, DRIVER_MODIFICATION);
@@ -213,32 +226,37 @@ ADCAEN1725S::ADCAEN1725S(const char *portName, int LinkType, int LinkNum,
   status |= setIntegerParam(CN_DPPAcquisitionParam, 2);
   status |= setIntegerParam(CN_DPPTriggerMode, 0);
 
+  status |= setIntegerParam(CN_RecordLength, 256);
+
   for (auto i = 0; i < MAX_SIGNALS; i++) {
-    
-    status |= setIntegerParam(i, CN_DPPPreTrigger, 24);
-    status |= setIntegerParam(i, CN_DPPChannelPulsePolarity, 0);
+
+    status |= setIntegerParam(i, CN_PreTrigger, 24);
+    status |= setIntegerParam(i, CN_ChannelPulsePolarity, 0);
 
     status |= setIntegerParam(i, CN_DPPNumEventAggregate, 1);
 
-    status |= setIntegerParam(i, CN_DPPPSDThresholdHold, 256);
-    status |= setIntegerParam(i, CN_DPPPSDThreshold, 650);
-    status |= setIntegerParam(i, CN_DPPPSDSelfThreshold, 1);
-    status |= setIntegerParam(i, CN_DPPPSDChargeSens, 1);
-    status |= setIntegerParam(i, CN_DPPPSDShortGate, 20);
-    status |= setIntegerParam(i, CN_DPPPSDLongGate, 75);
-    status |= setIntegerParam(i, CN_DPPPSDGateOffset, 0);
-    status |= setIntegerParam(i, CN_DPPPSDTriggerValidationWindow, 1);
-    status |= setIntegerParam(i, CN_DPPPSDNumberSample, 1);
-    status |= setIntegerParam(i, CN_DPPPSDDiscriminator, 1);
-    status |= setIntegerParam(i, CN_DPPPSDCFDFraction, 1);
-    status |= setIntegerParam(i, CN_DPPPSDCFDDelay, 1);
-    status |= setIntegerParam(i, CN_DPPPSDPileUp, 1);
-    status |= setIntegerParam(i, CN_DPPPSDPileUpGap, 1000);
+    status |= setIntegerParam(i, CN_PSDThresholdHold, 256);
+    status |= setIntegerParam(i, CN_PSDThreshold, 650);
+    status |= setIntegerParam(i, CN_PSDSelfThreshold, 1);
+    status |= setIntegerParam(i, CN_PSDChargeSens, 1);
+    status |= setIntegerParam(i, CN_PSDShortGate, 20);
+    status |= setIntegerParam(i, CN_PSDLongGate, 75);
+    status |= setIntegerParam(i, CN_PSDGateOffset, 0);
+    status |= setIntegerParam(i, CN_PSDTriggerValidationWindow, 1);
+    status |= setIntegerParam(i, CN_BaselineSamples, 1);
+    status |= setIntegerParam(i, CN_BaselineFixedValue, 1);
+
+    status |= setIntegerParam(i, CN_PSDDiscriminator, 0);
+    status |= setIntegerParam(i, CN_PSDCFDFraction, 1);
+    status |= setIntegerParam(i, CN_PSDCFDDelay, 1);
+    status |= setIntegerParam(i, CN_PSDPileUp, 1);
+    status |= setIntegerParam(i, CN_PSDPileUpGap, 1000);
 
     // Result
-    status |= setIntegerParam(i, CN_DPPPSDChargeLong, 0);
-    status |= setIntegerParam(i, CN_DPPPSDChargeShort, 0);
-    status |= setDoubleParam(i, CN_DPPPSDRateEv, 0.0);
+    status |= setIntegerParam(i, CN_PSDChargeLong, 0);
+    status |= setIntegerParam(i, CN_PSDChargeShort, 0);
+    status |= setDoubleParam(i, CN_PSDRateEv, 0.0);
+    status |= setDoubleParam(i, CN_PSDRateEv2, 0.0);
   }
 
   if (status) {
@@ -268,7 +286,7 @@ asynStatus ADCAEN1725S::connectADC() {
   const char *functionName = "connectADC";
   int status = asynSuccess;
   CAEN_DGTZ_ErrorCode ret;
-  uint32_t temperature;
+  // uint32_t temperature;
 
   ret = CAEN_DGTZ_OpenDigitizer(linkType_, linkNum_, conetNode_,
                                 VMEBaseAddress_, &handle_);
@@ -311,7 +329,7 @@ asynStatus ADCAEN1725S::connectADC() {
     return (asynStatus)status;
   }
 
-  ret = CAEN_DGTZ_SetRecordLength(handle_, 4 * 16);
+  ret = CAEN_DGTZ_SetRecordLength(handle_, TEMP_LENGTH_RECORD);
   if (ret) {
     asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
               "%s:%s: CAEN_DGTZ_SetRecordLength failed (%d) \n", driverName,
@@ -381,6 +399,16 @@ void ADCAEN1725S::dataGrabTask() {
   int i;
   int acq_mode;
 
+  /* Arrays for data analysis */
+  uint64_t PrevTime[MAX_SIGNALS];
+  uint64_t ExtendedTT[MAX_SIGNALS];
+  uint32_t *EHisto[MAX_SIGNALS]; // Energy Histograms
+  int ECnt[MAX_SIGNALS];
+  int TrgCnt[MAX_SIGNALS];
+  int PurCnt[MAX_SIGNALS];
+
+  int event_counter[MAX_SIGNALS];
+
   const char *functionName = "dataGrabTask";
 
   int acquire;
@@ -435,12 +463,13 @@ void ADCAEN1725S::dataGrabTask() {
     }
 
     epicsUInt16 *pData;
-    auto numTimePoints = 144;
+    auto numTimePoints = TEMP_LENGTH_RECORD;
     NDDataType_t dataType = NDDataType_t::NDUInt16;
 
-    size_t dims[2];
+    size_t dims[3];
     dims[0] = MAX_SIGNALS;
     dims[1] = numTimePoints;
+    // dims[2] = 3;
     if (this->pArrays[0])
       this->pArrays[0]->release();
     this->pArrays[0] = pNDArrayPool->alloc(2, dims, dataType, 0, 0);
@@ -448,13 +477,14 @@ void ADCAEN1725S::dataGrabTask() {
     memset(pData, 0, MAX_SIGNALS * numTimePoints * sizeof(epicsUInt16));
 
     for (auto ch = 0; ch < MAX_SIGNALS; ch++) {
+      event_counter[ch] = event_counter[ch] + numEvents[ch];
       for (auto ev = 0; ev < numEvents[ch]; ev++) {
         if ((events[ch][ev].ChargeLong > 0) &&
             (events[ch][ev].ChargeShort > 0)) {
 
-          status |= setIntegerParam(ch, CN_DPPPSDChargeLong,
-                                    events[ch][ev].ChargeLong);
-          status |= setIntegerParam(ch, CN_DPPPSDChargeShort,
+          status |=
+              setIntegerParam(ch, CN_PSDChargeLong, events[ch][ev].ChargeLong);
+          status |= setIntegerParam(ch, CN_PSDChargeShort,
                                     events[ch][ev].ChargeShort);
           callParamCallbacks(ch);
         }
@@ -470,9 +500,8 @@ void ADCAEN1725S::dataGrabTask() {
           size = (int)(waveform->Ns);  // Number of samples
           WaveLine = waveform->Trace1; // First trace (for DPP-PSD it is ALWAYS
                                        // the Input Signal)
-          // SaveWaveform(b, ch, 1, size, WaveLine);
           for (auto s = 0; s < size; s++) {
-            pData[MAX_SIGNALS * ch + s] = (epicsUInt16)(WaveLine[s]);
+            pData[0 + MAX_SIGNALS * ch + s] = (epicsUInt16)(WaveLine[s]);
           }
 
           WaveLine = waveform->Trace2;
@@ -494,10 +523,11 @@ void ADCAEN1725S::dataGrabTask() {
 
     elapsedTime_ = epicsTimeDiffInSeconds(&startTime, &prevTime);
 
-    if (elapsedTime_ > 1.0) {
+    if (elapsedTime_ > 0.5) {
       for (auto ch = 0; ch < MAX_SIGNALS; ch++) {
-        status |= setDoubleParam(ch, CN_DPPPSDRateEv,
-                                  (float)numEvents[ch] / elapsedTime_);
+        status |= setDoubleParam(ch, CN_PSDRateEv,
+                                 (float)event_counter[ch] / elapsedTime_);
+        event_counter[ch] = 0;
         callParamCallbacks(ch);
       }
       prevTime = startTime;
@@ -539,8 +569,6 @@ void ADCAEN1725S::statusTask() {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                   "%s:%s: CAEN_DGTZ_ReadTemperature failed (%d) \n", driverName,
                   functionName, ret);
-        // status = asynError;
-        //  return (asynStatus)status;
       }
       setIntegerParam(i, CN_ReadTemperature, temperature);
       callParamCallbacks(i);
@@ -551,14 +579,12 @@ void ADCAEN1725S::statusTask() {
 }
 
 asynStatus ADCAEN1725S::createStaticEnums() {
-  const char *functionName = "createStaticEnums";
+  // const char *functionName = "createStaticEnums";
   enumStruct_t *pEnum;
   int mode = 0;
   numValidSWTriggerModes_ = 0;
   for (mode = 0; mode < NUM_TRIGGER_MODES; mode++) {
     // Internal trigger mode is always supported
-    printf("%s:%s Create enum %d -> %s\n", driverName, functionName, mode,
-           triggerModeStrings[mode]);
     pEnum = swtriggerModeEnums_ + mode;
     strcpy(pEnum->string, triggerModeStrings[mode]);
     pEnum->value = mode;
@@ -616,7 +642,8 @@ asynStatus ADCAEN1725S::writeInt32(asynUser *pasynUser, epicsInt32 value) {
              (function == CN_ChannelTriggerThreshold) ||
              (function == CN_GroupTriggerThreshold) ||
              (function == CN_RunSynchronizationMode) ||
-             (function == CN_IOLevel) || (function == CN_TriggerPolarity)) {
+             (function == CN_IOLevel) ||
+             (function == CN_ChannelPulsePolarity)) {
 
   } else if ((function == CN_SWTriggerMode)) {
   } else if ((function == CN_IRQEnable) /** || (function == CN_IRQLevel) ||
@@ -714,8 +741,13 @@ asynStatus ADCAEN1725S::setIRQ() {
 
   ret = CAEN_DGTZ_SetInterruptConfig(handle_, state, level, status_id,
                                      event_number, irq_mode);
-
-  printf("%s:%s CAEN_DGTZ_SetInterruptConfig Done\n", driverName, functionName);
+  if (ret) {
+    asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+              "%s:%s: CAEN_DGTZ_SetInterruptConfig failed (%d)\n", driverName,
+              functionName, ret);
+    status = asynError;
+    return (asynStatus)status;
+  }
   return status;
 }
 
@@ -849,6 +881,11 @@ asynStatus ADCAEN1725S::setChannelParameter() {
   CAEN_DGTZ_DPP_PSD_Params_t params;
   CAEN_DGTZ_ErrorCode ret;
 
+  int recordlength[MAX_SIGNALS];
+  int pretrigger[MAX_SIGNALS];
+  int polarity[MAX_SIGNALS];
+  int dcoffset[MAX_SIGNALS];
+
   int ret_int;
   int thrh;
   int thr[MAX_SIGNALS];
@@ -865,49 +902,49 @@ asynStatus ADCAEN1725S::setChannelParameter() {
   CAEN_DGTZ_DPP_PUR_t purh;
   int purg;
 
-  getIntegerParam(CN_DPPPSDThresholdHold, &thrh);
+  getIntegerParam(CN_PSDThresholdHold, &thrh);
   params.trgho = thrh;
 
-  getIntegerParam(CN_DPPPSDPileUp, &ret_int);
+  getIntegerParam(CN_PSDPileUp, &ret_int);
   purh = static_cast<CAEN_DGTZ_DPP_PUR_t>(ret_int);
   params.purh = purh;
 
-  getIntegerParam(CN_DPPPSDShortGate, &purg);
+  getIntegerParam(CN_PSDShortGate, &purg);
   params.purgap = purg;
 
   for (auto i = 0; i < MAX_SIGNALS; i++) {
 
-    getIntegerParam(i, CN_DPPPSDThreshold, thr + i);
+    getIntegerParam(i, CN_PSDThreshold, thr + i);
     params.thr[i] = thr[i];
 
-    getIntegerParam(i, CN_DPPPSDSelfThreshold, selfthr + i);
+    getIntegerParam(i, CN_PSDSelfThreshold, selfthr + i);
     params.selft[i] = selfthr[i];
 
-    getIntegerParam(i, CN_DPPPSDChargeSens, csens + i);
+    getIntegerParam(i, CN_PSDChargeSens, csens + i);
     params.csens[i] = csens[i];
 
-    getIntegerParam(i, CN_DPPPSDShortGate, sgate + i);
+    getIntegerParam(i, CN_PSDShortGate, sgate + i);
     params.sgate[i] = sgate[i];
 
-    getIntegerParam(i, CN_DPPPSDLongGate, lgate + i);
+    getIntegerParam(i, CN_PSDLongGate, lgate + i);
     params.lgate[i] = lgate[i];
 
-    getIntegerParam(i, CN_DPPPSDGateOffset, gateof + i);
+    getIntegerParam(i, CN_PSDGateOffset, gateof + i);
     params.pgate[i] = gateof[i];
 
-    getIntegerParam(i, CN_DPPPSDTriggerValidationWindow, trigw + i);
+    getIntegerParam(i, CN_PSDTriggerValidationWindow, trigw + i);
     params.tvaw[i] = trigw[i];
 
-    getIntegerParam(i, CN_DPPPSDNumberSample, nsbs + i);
+    getIntegerParam(i, CN_BaselineSamples, nsbs + i);
     params.nsbl[i] = nsbs[i];
 
-    getIntegerParam(i, CN_DPPPSDDiscriminator, disc + i);
+    getIntegerParam(i, CN_PSDDiscriminator, disc + i);
     params.discr[i] = disc[i];
 
-    getIntegerParam(i, CN_DPPPSDCFDFraction, cfdf + i);
+    getIntegerParam(i, CN_PSDCFDFraction, cfdf + i);
     params.cfdf[i] = cfdf[i];
 
-    getIntegerParam(i, CN_DPPPSDCFDDelay, cfdd + i);
+    getIntegerParam(i, CN_PSDCFDDelay, cfdd + i);
     params.cfdd[i] = cfdd[i];
 
     params.trgc[i] =
@@ -915,7 +952,6 @@ asynStatus ADCAEN1725S::setChannelParameter() {
   }
 
   ret = CAEN_DGTZ_SetDPPParameters(handle_, 0xFF, &params);
-
   if (ret) {
     asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
               "%s:%s: CAEN_DGTZ_SetDPPParameters failed (%d)\n", driverName,
@@ -924,21 +960,36 @@ asynStatus ADCAEN1725S::setChannelParameter() {
     return (asynStatus)status;
   }
 
+  getIntegerParam(CN_InputDynamic, &ret_int);
+  ret = CAEN_DGTZ_WriteRegister(handle_, 0x8028, ret_int);
+  if (ret) {
+    asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+              "%s:%s: CAEN_DGTZ_WriteRegister failed (%d)\n", driverName,
+              functionName, ret);
+    status = asynError;
+    return (asynStatus)status;
+  }
+
   for (auto i = 0; i < MAX_SIGNALS; i++) {
-    if (i % 2 == 0)
-      ret = CAEN_DGTZ_SetRecordLength(handle_, 140, i);
+    if (i % 2 == 0) {
+      getIntegerParam(i, CN_RecordLength, recordlength + i);
+      ret = CAEN_DGTZ_SetRecordLength(handle_, recordlength[i], i);
+    }
 
     // Set a DC offset to the input signal to adapt it to digitizer's dynamic
     // range
-    ret = CAEN_DGTZ_SetChannelDCOffset(handle_, i, 0x8000);
+    getIntegerParam(i, CN_DCOffset, dcoffset + i);
+    ret = CAEN_DGTZ_SetChannelDCOffset(handle_, i, dcoffset[i]);
 
     // Set the Pre-Trigger size (in samples)
-    ret = CAEN_DGTZ_SetDPPPreTriggerSize(handle_, i, 30);
+    getIntegerParam(i, CN_PreTrigger, pretrigger + i);
+    ret = CAEN_DGTZ_SetDPPPreTriggerSize(handle_, i, pretrigger[i]);
 
     // Set the polarity for the given channel (CAEN_DGTZ_PulsePolarityPositive
     // or CAEN_DGTZ_PulsePolarityNegative)
-    ret = CAEN_DGTZ_SetChannelPulsePolarity(handle_, i,
-                                            CAEN_DGTZ_PulsePolarityPositive);
+    getIntegerParam(i, CN_ChannelPulsePolarity, polarity + i);
+    ret = CAEN_DGTZ_SetChannelPulsePolarity(
+        handle_, i, static_cast<CAEN_DGTZ_PulsePolarity_t>(polarity[i]));
   }
 
   printf("%s:%s DPP Parameter Done\n", driverName, functionName);
