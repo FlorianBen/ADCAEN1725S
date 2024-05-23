@@ -19,6 +19,12 @@ LIB_INSTALLS    += ../os/linux-x86_64/libCAENDigitizer.so
 else ifeq (linux-x86, $(findstring linux-x86, $(T_A)))
 LIB_INSTALLS    += ../os/linux-x86/libCAENVME.so
 LIB_INSTALLS    += ../os/linux-x86/libCAENComm.so
+LIB_INSTALLS    += ../os/linux-x86/libCAENDigitizer.so
+
+else ifeq (linux-arm64, $(findstring linux-arm64, $(T_A)))
+LIB_INSTALLS    += ../os/linux-arm64/libCAENVME.so
+LIB_INSTALLS    += ../os/linux-arm64/libCAENComm.so
+LIB_INSTALLS    += ../os/linux-arm64/libCAENDigitizer.so
 
 endif
 

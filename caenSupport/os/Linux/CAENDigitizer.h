@@ -17,6 +17,15 @@
 #ifndef __CAENDIGITIZER_H
 #define __CAENDIGITIZER_H
 
+#define _CAEN_DGTZ_STR_HELPER(S)		#S
+#define CAEN_DGTZ_STR(S)				_CAEN_DGTZ_STR_HELPER(S)
+
+#define CAEN_DGTZ_VERSION_MAJOR		2																																//!< Major version
+#define CAEN_DGTZ_VERSION_MINOR		17																																//!< Minor version
+#define CAEN_DGTZ_VERSION_PATCH		3																																//!< Patch version
+#define CAEN_DGTZ_VERSION			CAEN_DGTZ_STR(CAEN_DGTZ_VERSION_MAJOR) "." CAEN_DGTZ_STR(CAEN_DGTZ_VERSION_MINOR) "." CAEN_DGTZ_STR(CAEN_DGTZ_VERSION_PATCH)	//!< The version string as Major.Minor.Patch
+#define CAEN_DGTZ_VERSION_NUMBER	((CAEN_DGTZ_VERSION_MAJOR) * 10000 + (CAEN_DGTZ_VERSION_MINOR) * 100 + (CAEN_DGTZ_VERSION_PATCH))								//!< The version number: for example version 1.2.3 gives 10203
+
 #include "CAENDigitizerType.h"
 
 #ifdef __cplusplus
@@ -45,6 +54,14 @@ extern "C" {
 //#define CAEN_DGTZ_SetMaxNumAggregatesBLT CAEN_DGTZ_SetMaxNumEventsBLT
 
 #define MAX_PROBENAMES_LEN (50)
+
+/**************************************************************************//**
+* \brief   Returns the Software Release of the library
+*
+* \param   [OUT] SwRel: the Software Release of the library.
+* \return  0 = Success; negative numbers are error codes
+******************************************************************************/
+CAENDGTZ_DLLAPI CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_SWRelease(char* SwRel);
 
 /**************************************************************************//**
 * \fn      CAENDGTZ_DLLAPI CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_OpenDigitizer(CAEN_DGTZ_ConnectionType LinkType, int LinkNum, int ConetNode, uint32_t VMEBaseAddress, int *handle);
